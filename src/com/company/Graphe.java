@@ -56,12 +56,10 @@ public class Graphe {
     /**
      * Verifier la présence d'un sommet dans le Graphe G
      * @param v Sommet à vérifier
-     * @return
+     * @return présence du sommet
      */
     public boolean verifieSommet(int v){
-        if(v>=this.getN()||v<0)
-            return false;
-        return true;
+        return v < this.getN() && v >= 0;
     }
 
     /**
@@ -204,21 +202,35 @@ public class Graphe {
         return s;
     }
 
-    public String par(Resultat res, ArrayList<String> chemins, int w){
-        while(w!=0){
-            for (int j:this.a.get(w).getAdj()
-                 ) {
-                if(res.getDist()[j]==res.getDist()[w]-1){
-                    chemins.add("->"+j+""+par(res, chemins, j));
-                }
-            }
-        }
-        return "";
-    }
-    public void plusCourtschemins(){
+    public String plusCourtsChemin(int w) {
         Resultat res = this.parcoursLargeur();
-        ArrayList<String> chemins = new ArrayList<String>();
-        System.out.println(par(res,chemins, this.n-1));
+        String s = "" + w + "->";
+        int i, j = w;
+        while (j != -1) {
+            i = res.getPi()[j];
+            j = i;
+            s += i + "->";
+        }
+        return s;
+    }
+
+    /***
+     * Matrice d'adjacence du graphe
+     * @return matrice
+     */
+    public int[][] listToMatrice() {
+        int[][] matrice = new int[this.n][this.n];
+        for (int i = 0; i < this.n; i++) {
+            for (int j = 0; j < this.n; j++) {
+                if (this.sontVoisins(i, j)) {
+                    matrice[i][j] = 1;
+                } else
+                    matrice[i][j] = 0;
+                System.out.print(matrice[i][j] + " ");
+            }
+            System.out.println();
+        }
+        return matrice;
     }
 
 }
