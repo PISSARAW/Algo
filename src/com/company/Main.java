@@ -152,5 +152,11 @@ public class Main {
         biparti.ajourteArete(3, 0);
         System.out.println("\n\nBiparti");
         System.out.println(biparti.biparti());
+        System.out.println("\n\nNb Aretes");
+        System.out.println(gomath.nbAretes());
+        System.out.println(new Grille(4, 4));
+        (new Grille(4, 4)).creerGrilleParfaite();
+        System.out.println(Graphe.nbConnexesGraphes(4));
+        circuit.ajourteArete(2, 0, 12);
     }
 }

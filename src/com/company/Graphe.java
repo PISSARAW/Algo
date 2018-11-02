@@ -81,6 +81,7 @@ public class Graphe {
         return null;
     }
 
+
     /**
      * Vérifier si deux sommets sont voisins
      * @param i 1er sommet
@@ -95,11 +96,11 @@ public class Graphe {
         return this.a.get(v).getAdj().size();
     }
 
-
-    public int maxDegre(){
-        return this.n-1;
+    public static int nbConnexesGraphes(int n) {
+        if (n <= 0)
+            return 0;
+        return (int) Math.pow(2, new Double((n * (n - 1)) / 2));
     }
-
 
 
     /**
@@ -287,12 +288,25 @@ public class Graphe {
     }
 
     /**
+     * Nombre d'arêtes d'un Graphe
+     *
+     * @return
+     */
+    public int nbAretes() {
+        int j = 0;
+        for (int i = 0; i < this.n; i++) {
+            j += this.degre(i);
+        }
+        return j / 2;
+    }
+
+    /**
      * Détermine si un graphe est biparti
      *
      * @return Valeur vérité
      */
     public boolean biparti() {
-        Resultat res = this.parcoursProfondeur();
+        Resultat res = new Resultat(new String[this.n]);
         for (int i = 0; i < this.n; i++) {
             res.getCouleurs()[i] = "blanc";
         }
@@ -306,5 +320,51 @@ public class Graphe {
     }
 
 
+    /////////////  Graphes valués  /////////////
+
+    /**
+     * Détermine si le Graphe G est connexe
+     *
+     * @return Valeur vérité
+     */
+    public boolean connexe() {
+        Resultat res = this.parcoursProfondeur();
+        int j = 0;
+        for (int i = 0; i < res.getPi().length; i++) {
+            if (res.getPi()[i] == -1)
+                j += 1;
+            if (j == 2)
+                return false;
+        }
+        return true;
+    }
+
+
+    ////////////////////////////////////////////
+
+
+    ///////////// Formule de récurrence ///////
+    //Nombre de graphes connexes à n sommets
+
+    public Resultat bellmanFord(int s) {
+        Resultat res = new Resultat(new int[this.n], new int[this.n], true);
+        for (int i = 0; i < this.n; i++) {  //Pour chaque i de S faire
+            res.getPi()[i] = -1; // pi de i = nil
+            if (i == s) // d de i
+                res.getDist()[i] = 0;
+            else // Sinon
+                res.getDist()[i] = -1;
+        }
+
+        for (int i = 0; i < this.n; i++) { //Pour i = 0 à |S| - 1 faire
+            for (Integer v : this.a.get(i).getAdj()
+                    ) {
+                if (res.getDist()[v] > res.getDist()[s]) {
+
+                }
+            }
+        }
+        return res;
+    }
 
 }

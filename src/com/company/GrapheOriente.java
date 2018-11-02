@@ -34,12 +34,6 @@ public class GrapheOriente extends Graphe {
 
     public int degre(int v){
         int degre=this.a.get(v).getAdj().size();
-        for(int i=0; i<this.getN(); i++){
-            if(i==v)
-                i++;
-            if (this.a.get(i).getAdj().contains(v))
-                degre++;
-        }
         return degre;
     }
 
@@ -47,6 +41,13 @@ public class GrapheOriente extends Graphe {
         return this.a.get(i).getAdj().contains(j);
     }
 
+    public int nbAretes() {
+        int j = 0;
+        for (int i = 0; i < this.n; i++) {
+            j += this.degre(i);
+        }
+        return j;
+    }
 
 
     public String parcoursLargeur(int v){

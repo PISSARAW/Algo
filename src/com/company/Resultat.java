@@ -8,14 +8,41 @@ public class Resultat {
     int [] dist;
     int [] d;
     int [] f;
+    boolean bool;
+
+    public Resultat(String[] couleurs) {
+        this.couleurs = couleurs;
+    }
+
     int temps;
 
+    /**
+     * Constructeur pour PPC
+     *
+     * @param couleurs
+     * @param pi
+     * @param d
+     * @param f
+     * @param t
+     */
     public Resultat(String[] couleurs, int[] pi, int[] d, int[] f, int t) {
         this.couleurs = couleurs;
         this.pi = pi;
         this.d = d;
         this.f = f;
         this.temps=t;
+    }
+
+    /***
+     * Constructeur Bellman-Ford
+     * @param pi
+     * @param dist
+     * @param bool
+     */
+    public Resultat(int[] pi, int[] dist, boolean bool) {
+        this.pi = pi;
+        this.dist = dist;
+        this.bool = bool;
     }
 
     public Resultat(String[] couleurs, int[] pi, int[] dist) {
