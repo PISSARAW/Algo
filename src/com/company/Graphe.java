@@ -233,4 +233,78 @@ public class Graphe {
         return matrice;
     }
 
+    /**
+     * Racine d'un sommet S du Graphe
+     *
+     * @param pi Table des prédécéseurs
+     * @param x  Sommet x
+     * @return Racine de x
+     */
+    public int racine(int[] pi, int x) {
+        int i = 0;
+        while (i != -1) {
+            i = pi[x];
+            if (i != -1)
+                x = i;
+        }
+        return x;
+    }
+
+    /**
+     * Vérifie si deux sommets ont la même  source
+     *
+     * @param x
+     * @param y
+     * @return Valeur vérité
+     */
+    public boolean memeSource(int x, int y) {
+        Resultat res = this.parcoursProfondeur();
+        return this.racine(res.getPi(), x) == this.racine(res.getPi(), y);
+    }
+
+    /**
+     * Vérifie si deux sommets ont la même couleur
+     *
+     * @param s    Sommet s
+     * @param c    Couleur de S
+     * @param bool Valeur vérité de S par rapport à ses voisins
+     * @param coul
+     * @return
+     */
+    private boolean testCouleur(int s, String c, Boolean bool, String[] coul) {
+        coul[s] = c;
+        for (Integer u : this.a.get(s).getAdj()
+                ) {
+            if (coul[u].equals("blanc")) {
+                if (coul[s].equals("rouge"))
+                    this.testCouleur(u, "vert", bool, coul);
+                else
+                    this.testCouleur(u, "rouge", bool, coul);
+            } else if (coul[u].equals(coul[s]))
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Détermine si un graphe est biparti
+     *
+     * @return Valeur vérité
+     */
+    public boolean biparti() {
+        Resultat res = this.parcoursProfondeur();
+        for (int i = 0; i < this.n; i++) {
+            res.getCouleurs()[i] = "blanc";
+        }
+        Boolean bool = true;
+        for (int i = 0; i < this.n; i++) {
+            if (res.getCouleurs()[i].equals("blanc")) {
+                bool = this.testCouleur(i, "vert", bool, res.getCouleurs());
+            }
+        }
+        return bool;
+    }
+
+
+
 }

@@ -44,9 +44,7 @@ public class GrapheOriente extends Graphe {
     }
 
     public boolean pere(int i, int j){
-        if(this.a.get(i).getAdj().contains(j))
-            return true;
-        return false;
+        return this.a.get(i).getAdj().contains(j);
     }
 
 
@@ -124,6 +122,25 @@ public class GrapheOriente extends Graphe {
             }
         }
         return res;
+    }
+
+    /**
+     * Transposé d'un Graphe G
+     *
+     * @return transposé G'
+     */
+    public GrapheOriente transpose() {
+        GrapheOriente graphe = new GrapheOriente(this.n);
+        int i = 0;
+        for (Arete a : this.a
+                ) {
+            for (Integer j : a.getAdj()
+                    ) {
+                graphe.ajourteArete(j, i);
+            }
+            i++;
+        }
+        return graphe;
     }
 
 

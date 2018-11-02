@@ -116,5 +116,41 @@ public class Main {
         System.out.println("Parcours en largeur");
         System.out.println(gomath.parcoursLargeur());
         System.out.println(gomath.plusCourtsChemin(27));
+
+
+        Graphe test = new GrapheOriente(8);
+        test.ajourteArete(0, 1);
+        test.ajourteArete(1, 2);
+        test.ajourteArete(2, 5);
+        test.ajourteArete(3, 4);
+        test.ajourteArete(4, 6);
+        test.ajourteArete(6, 7);
+        System.out.println("\n\n Même source \n\n");
+        System.out.println(test.memeSource(5, 7));
+
+        Graphe circuit = new GrapheOriente(6);
+        circuit.ajourteArete(0, 1);
+        circuit.ajourteArete(0, 3);
+        circuit.ajourteArete(0, 4);
+        circuit.ajourteArete(1, 2);
+        circuit.ajourteArete(2, 5);
+        circuit.ajourteArete(3, 4);
+        circuit.ajourteArete(4, 5);
+        circuit.ajourteArete(5, 1);
+        System.out.println("\n\nCircuit\n\n");
+        System.out.println(circuit.parcoursProfondeur());
+        System.out.println(circuit);
+        System.out.println(((GrapheOriente) circuit).transpose());
+        System.out.println(((GrapheOriente) circuit).transpose().parcoursProfondeur());
+        System.out.println(((GrapheOriente) circuit).transpose().biparti());
+        System.out.println(circuit.biparti());
+
+        GrapheOriente biparti = new GrapheOriente(4);
+        biparti.ajourteArete(0, 1);
+        biparti.ajourteArete(1, 2);
+        biparti.ajourteArete(2, 3);
+        biparti.ajourteArete(3, 0);
+        System.out.println("\n\nBiparti");
+        System.out.println(biparti.biparti());
     }
 }
