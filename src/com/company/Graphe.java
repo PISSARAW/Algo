@@ -321,7 +321,7 @@ public class Graphe implements Grille {
     }
 
 
-    /////////////////////////////// Grille ////////////////////////////////////////////
+/////////////////////////////// Grille ////////////////////////////////////////////
     /**
      * Construire unr grille
      *
@@ -330,12 +330,14 @@ public class Graphe implements Grille {
      */
     @Override
     public void construireGrille(int h, int l) {
+        int w=1;
         for (int i = 0; i <h ; i++) {
             for (int j = 0; j <l ; j++) {
-                if(j<l&& i!=j)
-                    this.ajourteArete(i,j);
-                if(i<h && i!=j)
-                    this.ajourteArete(i,i+1);
+                if(i!=j){
+                    this.ajourteArete(i,w);
+                    this.ajourteArete(i,w+l);
+                    w++;
+                }
             }
 
         }
@@ -349,10 +351,20 @@ public class Graphe implements Grille {
      */
     @Override
     public void ajouterMur(int i, int j) {
-
+        ListIterator<Arete> iterator = this.a.get(i).listIterator();
+        ListIterator<Arete> iterator1 = this.a.get(j).listIterator();
+        while(iterator.hasNext()){
+            if(iterator.next().getN()==j)
+                iterator.remove();
+        }
+        while(iterator1.hasNext()){
+            if(iterator1.next().getN()==i)
+                iterator1.remove();
+        }
     }
 
     ///////////////////////////// Grille ////////////////////////////////////////////////
+
 
 
 
