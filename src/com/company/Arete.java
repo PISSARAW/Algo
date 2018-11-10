@@ -3,31 +3,23 @@ package com.company;
 import java.util.LinkedList;
 
 public class Arete {
-    public LinkedList<Integer> getAdj() {
-        return adj;
+    int n;
+    int p;
+
+    public Arete(int j, int poids){
+        this.n=j;
+        this.p=poids;
+    }
+    public Arete (int j){
+        this.n=j;
+        this.p=0;
     }
 
-    public void setAdj(LinkedList<Integer> adj) {
-        this.adj = adj;
+    public int getN(){
+        return this.n;
     }
 
-    public int getPoids() {
-        return poids;
-    }
-
-    public void setPoids(int poids) {
-        this.poids = poids;
-    }
-
-    private LinkedList<Integer> adj;
-    private int poids;
-
-    public Arete(LinkedList<Integer> adj, int poids) {
-        this.adj = adj;
-        this.poids = poids;
-    }
-
-    public Arete(LinkedList<Integer> adj) {
-        this.adj = adj;
+    public int getP(){
+        return this.p;
     }
 }
