@@ -1,6 +1,9 @@
 package com.company;
 
-public class Graphe implements Grille {
+import java.lang.reflect.Array;
+import java.util.*;
+
+public class Graphe {
     protected final int n;
     protected ArrayList<LinkedList<Arete>> a;
     protected static final int INFINITE= Integer.MAX_VALUE/2;
@@ -62,7 +65,7 @@ public class Graphe implements Grille {
     }
 
     public boolean sontVoisins(int i, int j){
-        return (this.a.get(i).contains(j)||this.a.get(j).contains(i));
+        return (this.a.get(i).contains(new Arete(j))||this.a.get(j).contains(new Arete(i)));
     }
 
 
@@ -99,7 +102,7 @@ public class Graphe implements Grille {
         while(!f.empty()){
             x=f.pop();
             for (Arete a:this.a.get(x)
-                    ) {
+            ) {
                 i=a.getN();
                 if(res.getCouleurs()[i].equals("blanc")){
                     res.getCouleurs()[i]="gris";
@@ -117,13 +120,11 @@ public class Graphe implements Grille {
         res.getCouleurs()[v]="gris";
         res.setTemps(res.getTemps()+1);
         res.getD()[v]=res.getTemps();
-        for (int i = 0; i <this.getN() ; i++) {
-            for (Arete av:this.a.get(i)
-                 ) {
-                if(res.getCouleurs()[av.getN()].equals("blanc")){
-                    res.getPi()[av.getN()]=v;
-                    this.pp(av.getN(),res);
-                }
+        for (Arete av:this.a.get(v)
+            ) {
+            if(res.getCouleurs()[av.getN()].equals("blanc")){
+                res.getPi()[av.getN()]=v;
+                this.pp(av.getN(),res);
             }
         }
         res.getCouleurs()[v]="noir";
@@ -160,7 +161,7 @@ public class Graphe implements Grille {
         String s="A= {";
         for(int i = 0; i<this.n; i++){
             for (Arete num : this.a.get(i)
-                    ) {
+            ) {
                 s+= this.printArc(i, num.getN(), num.getP())+" ";
             }
         }
@@ -175,22 +176,22 @@ public class Graphe implements Grille {
         for(int i=0; i<this.n; i++){
             res.getPi()[i]=-1;
             if(i==s)
-                res.getD()[i]=0;
+                res.getDist()[i]=0;
             else
-                res.getD()[i]=INFINITE;
+                res.getDist()[i]=INFINITE;
         }
 
         for(int u=0; u<this.n; u++){
             for (Arete av : this.a.get(u)){
-                if(res.getD()[av.getN()]>res.getD()[u]+ av.getP()){
-                    res.getD()[av.getN()]=res.getD()[u]+av.getP();
+                if(res.getDist()[av.getN()]>res.getDist()[u]+ av.getP()){
+                    res.getDist()[av.getN()]=res.getDist()[u]+av.getP();
                     res.getPi()[av.getN()]=u;
                 }
             }
         }
         for (int u = 0; u <this.n ; u++) {
             for (Arete av : this.a.get(u)){
-                if(res.getD()[av.getN()]>res.getD()[u]+ av.getP()){
+                if(res.getDist()[av.getN()]>res.getDist()[u]+ av.getP()){
                     res.bool = false;
                     return res;
                 }
@@ -276,7 +277,7 @@ public class Graphe implements Grille {
     private boolean testCouleur(int s, String c, Boolean bool, String[] coul) {
         coul[s] = c;
         for (Arete u : this.a.get(s)
-                ) {
+        ) {
             if (coul[u.getN()].equals("blanc")) {
                 if (coul[s].equals("rouge"))
                     this.testCouleur(u.getN(), "vert", bool, coul);
@@ -320,37 +321,75 @@ public class Graphe implements Grille {
         return bool;
     }
 
+    public ArrayList<List<Integer>> tousLesChemins(int s, int d){
+        boolean[] estVisite = new boolean[this.n];
+        ArrayList<Integer> chemins = new ArrayList<>();
+        ArrayList<List<Integer>> c=new ArrayList<>();
+        chemins.add(s);
+        this.trouveChemins(s,d,estVisite, chemins, c);
+        return c;
+    }
 
-/////////////////////////////// Grille ////////////////////////////////////////////
+    public void trouveChemins(Integer u, Integer d, boolean[] sommetsVu, List<Integer> chemin, ArrayList<List<Integer>> c){
+        sommetsVu[u]=true;
+        if(u.equals(d)){
+            boolean b= false;
+            for (List<Integer> ch:c
+                 ) {
+                if(ch.equals(chemin))
+                    b=true;
+            }
+            if(b==false){
+                c.add(new ArrayList<>(chemin));
+                System.out.println(chemin + " T : "+ chemin.size());
+            }
+        }
+        for (Arete av: this.a.get(u)
+             ) {
+                if(!sommetsVu[av.getN()]){
+                    chemin.add(av.getN());
+                    trouveChemins(av.getN(), d, sommetsVu, chemin, c);
+                    chemin.remove(Integer.valueOf(av.getN()));
+                }
+        }
+        sommetsVu[u]=false;
+    }
+
+
+    /////////////////////////////// Grille ////////////////////////////////////////////
+
     /**
      * Construire unr grille
-     *
      * @param h hauteur
      * @param l largeur
      */
-    @Override
-    public void construireGrille(int h, int l) {
-        int w=1;
-        for (int i = 0; i <h ; i++) {
-            for (int j = 0; j <l ; j++) {
-                if(i!=j){
-                    this.ajourteArete(i,w);
-                    this.ajourteArete(i,w+l);
-                    w++;
+    public static Graphe construireGrille(int h, int l){
+        Graphe g = new Graphe(h*l);
+        int x,y;
+        for (int i = 0; i <h*l ; i++) {
+            for (int j = 0; j <h*l ; j++) {
+                if(i!=j&&(j==i+1||j==i+l)){
+                    x=i;
+                    y=j;
+                    g.ajourteArete(i,j);
                 }
             }
-
         }
+        //Supprimer les arêtes genantes
+        for (int i = l-1; i <h*l ; i+=l) {
+            if(i!=h*l-1)
+                g.ajouterMur(i, i+1);
+        }
+        return g;
     }
-
     /**
      * Ajouter un mur entre i et j
      *
      * @param i case i
      * @param j case j
      */
-    @Override
     public void ajouterMur(int i, int j) {
+        System.out.println(this);
         ListIterator<Arete> iterator = this.a.get(i).listIterator();
         ListIterator<Arete> iterator1 = this.a.get(j).listIterator();
         while(iterator.hasNext()){
@@ -361,11 +400,44 @@ public class Graphe implements Grille {
             if(iterator1.next().getN()==i)
                 iterator1.remove();
         }
+        System.out.println(this);
+    }
+
+    public void afficherGrille(int i, int j){
+        int e=0;
+        for (int k = 0; k <i ; k++) {
+            for (int l = 0; l <j ; l++) {
+                System.out.print(e+" ");
+                e++;
+            }
+            System.out.println();
+        }
     }
 
     ///////////////////////////// Grille ////////////////////////////////////////////////
 
 
+
+    ///////////////////////////// Arbre //////////////////////////////////////////////////
+
+    public static Graphe construireArbre(int[] arbre){
+        return null;
+    }
+
+    public boolean estbinaire(){
+        for (LinkedList<Arete> la:this.a
+             ) {
+            if(la.size()>2)
+                return false;
+        }
+        return true;
+    }
+
+
+
+
+
+    ///////////////////////////// Arbre ///////////////////////////////////////////////////
 
 
 }
