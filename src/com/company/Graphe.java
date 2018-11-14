@@ -7,10 +7,12 @@ public class Graphe {
     protected final int n;
     protected ArrayList<LinkedList<Arete>> a;
     protected static final int INFINITE= Integer.MAX_VALUE/2;
-
+    protected  int l;
+    protected int nb;
 
     public Graphe(int n) {
         this.n = n;
+        this.nb=0;
         this.a =  new ArrayList<LinkedList<Arete>>();
         for(int i =0 ; i<n; i++){
             a.add(new LinkedList<Arete>());
@@ -22,6 +24,7 @@ public class Graphe {
             if(verifieSommet(j)){
                 this.a.get(i).add(new Arete(j));
                 this.a.get(j).add(new Arete(i));
+                this.nb+=2;
             }
         }
     }
@@ -115,7 +118,11 @@ public class Graphe {
         res.getCouleurs()[x]="noir";
     }
 
-
+    /**
+     * Parcour en largeur depuis un sommet v
+     * @param v un sommet du graphe
+     * @param res tableaux
+     */
     public void pp(int v, Resultat res){
         res.getCouleurs()[v]="gris";
         res.setTemps(res.getTemps()+1);
@@ -341,7 +348,7 @@ public class Graphe {
             }
             if(b==false){
                 c.add(new ArrayList<>(chemin));
-                System.out.println(chemin + " T : "+ chemin.size());
+                //System.out.println(chemin + " T : "+ chemin.size());
             }
         }
         for (Arete av: this.a.get(u)
@@ -365,6 +372,7 @@ public class Graphe {
      */
     public static Graphe construireGrille(int h, int l){
         Graphe g = new Graphe(h*l);
+        g.l=l;
         int x,y;
         for (int i = 0; i <h*l ; i++) {
             for (int j = 0; j <h*l ; j++) {
@@ -389,19 +397,35 @@ public class Graphe {
      * @param j case j
      */
     public void ajouterMur(int i, int j) {
-        System.out.println(this);
+        //System.out.println(this);
         ListIterator<Arete> iterator = this.a.get(i).listIterator();
-        ListIterator<Arete> iterator1 = this.a.get(j).listIterator();
         while(iterator.hasNext()){
-            if(iterator.next().getN()==j)
+            if(iterator.next().getN()==j){
                 iterator.remove();
+                this.nb--;
+            }
         }
-        while(iterator1.hasNext()){
-            if(iterator1.next().getN()==i)
-                iterator1.remove();
+        if(j<this.n){
+            ListIterator<Arete> iterator1 = this.a.get(j).listIterator();
+            while(iterator1.hasNext()){
+                if(iterator1.next().getN()==i){
+                    iterator1.remove();
+                    this.nb--;
+                }
+            }
         }
-        System.out.println(this);
+        //System.out.println(this);
     }
+
+    public void ajouteMurD(int i){
+        if((i+1)<this.n)
+            this.ajouterMur(i, i+1);
+    }
+    public void ajouteMurH(int i){
+        if((i+this.l)<this.n)
+            ajouterMur(i, (i+this.l));
+    }
+
 
     public void afficherGrille(int i, int j){
         int e=0;
@@ -440,4 +464,17 @@ public class Graphe {
     ///////////////////////////// Arbre ///////////////////////////////////////////////////
 
 
+
+
+
+
+
+
+    //////// ile de france ////
+    public static Graphe iledefrance(){
+        Graphe g = Graphe.construireGrille(11,12);
+
+
+        return g;
+    }
 }
