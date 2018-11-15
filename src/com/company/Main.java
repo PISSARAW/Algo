@@ -39,26 +39,38 @@ public class Main {
         Graphe math =  Graphe.construireGrille(4,4);
 
         // Trouver tous les chemins entre s et d
-        // Complexité O (|S|.|A|)
+        // Complexité O (|S|+|A|)
         chemins = math.tousLesChemins(0, 15);
 
         // Ajouter les murs
-        // Complexité O(|A|)
+        // Complexité O(m+n)
+        // On parcours tous les chemins d'une liste puis tous les sommets d'un chemin
 
-        math.ajouteMurH(3);
-        math.ajouteMurD(5);
-
-        chemins = math.tousLesChemins(0,15);
-        int i=0;
-        while(i<chemins.size()){
-            if(chemins.get(i).size()==i){
-                System.out.println(chemins.get(i));
-                break;
-            }
-            i++;
+        for (int i = 0; i <chemins.size() ; i++) {
+            for (int j = 0; j <chemins.get(i).size() ; j++) {
+                if(((j+1)<(chemins.get(i).size()))&&chemins.get(i).get(j+1)==6&&chemins.get(i).get(j)==5)
+                    chemins.remove(i);
+                if(((j+1)<(chemins.get(i).size()))&&chemins.get(i).get(j)==3&&chemins.get(i).get(j+1)==3+math.l)
+                    chemins.remove(i);
+                }
         }
+        System.out.println(chemins);
+        //math.ajouteMurH(3);
+        //math.ajouteMurD(5);
+
+
+
+        // Complexité 0(|m|)
+        // On parcours tous les chemins d'une liste
+        //chemins = math.tousLesChemins(0,15);
+        int min = chemins.get(0).size();
+        for (List<Integer> i : chemins){
+            min = min < i.size() ? min : i.size();
+        }
+        System.out.println(chemins.get(min));
 
         //////////////  Question 6  //////////////
+
 
     }
 }
