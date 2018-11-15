@@ -22,4 +22,10 @@ public class Arete {
     public int getP(){
         return this.p;
     }
+
+    public boolean equals(Arete a){
+        if(a.getN()==n&&a.getP()==p)
+            return true;
+        return false;
+    }
 }
