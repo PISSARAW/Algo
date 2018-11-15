@@ -42,7 +42,7 @@ public class Main {
         Graphe math =  Graphe.construireGrille(4,4);
 
         // Trouver tous les chemins entre s et d
-        // Complexité O (|S|+|A|)
+        // Complexité O (|S|.|A|)
         chemins = math.tousLesChemins(0, 15);
 
         // Ajouter les murs
