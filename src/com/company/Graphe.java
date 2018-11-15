@@ -463,18 +463,4 @@ public class Graphe {
 
     ///////////////////////////// Arbre ///////////////////////////////////////////////////
 
-
-
-
-
-
-
-
-    //////// ile de france ////
-    public static Graphe iledefrance(){
-        Graphe g = Graphe.construireGrille(11,12);
-
-
-        return g;
-    }
 }
