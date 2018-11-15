@@ -1,5 +1,8 @@
 package com.company;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -24,7 +27,7 @@ public class Main {
         
         System.out.println(gomath);
         System.out.println("Parcours en largeur");
-        System.out.println(gomath.parcoursLargeur());
+        System.out.println(gomath.parcoursLargeur(0));
 	// Un plus court chemin
         System.out.println(gomath.plusCourtsChemin(27, gomath.parcoursLargeur(0)));
 	
