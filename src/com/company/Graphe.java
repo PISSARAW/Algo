@@ -210,16 +210,17 @@ public class Graphe {
 
 
     public String plusCourtsChemin(int w, Resultat res) {
-        String s = "" + w + "->";
-        int i, j = 0;
+        ArrayList<Integer> s = new ArrayList();
+        s.add(w);
+        int i;
         while (w != -1) {
             i = res.getPi()[w];
             w = i;
-            s += i + "->";
-            j++;
+            if (i!=-1)
+                s.add(i);
         }
-        System.out.println("Taille du plus court chemin = "+ (j-1));
-        return s;
+        Collections.reverse(s);
+        return Arrays.toString(s.toArray());
     }
 
 
